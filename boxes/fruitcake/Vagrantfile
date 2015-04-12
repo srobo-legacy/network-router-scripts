@@ -30,6 +30,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.hostname = "fruitcake"
 
+  config.vm.provision :shell, inline: "yum install -y puppet hiera"
+
   # jmorse: reference config below
 
   # The url from where the 'config.vm.box' box will be fetched if it
