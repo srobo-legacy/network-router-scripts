@@ -6,6 +6,11 @@ if test $? != 0; then
 	exit 1
 fi
 
+if test ! -e  /tmp/srnet/newbury || test ! -e /tmp/srnet/floor0 || test ! -e /tmp/srnet/floor1 ||  test ! -e /tmp/srnet/floor2; then
+	echo "Network switch interfaces are not up" >&2
+	exit 1
+fi
+
 trap "kill -9 0" SIGINT SIGTERM SIGHUP
 
 # `vagrant box list` doesn't work for me. Test directly.
