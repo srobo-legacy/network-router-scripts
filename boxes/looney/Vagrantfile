@@ -12,6 +12,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "chef/fedora-20"
 
+  # jmorse: use a private network just for allowing vagrant to bring the
+  #         machine up, and for things like 'vagrant ssh' to work.
+  config.vm.network :private_network, ip: "192.168.34.10"
+
+  config.vm.provider :virtualbox do |vb|
+    # First nic is vagrants management interface
+    # Configure 2nd nic on machine to point at first virtual switch
+    vb.customize ["modifyvm", :id, "--nic2", "generic"]
+    vb.customize ["modifyvm", :id, "--nicgenericdrv2", "VDE"]
+    vb.customize ["modifyvm", :id, "--nicproperty2", "network=/tmp/srnet/newbury"]
+    # Configure 3rd nic to be a floor network.
+    vb.customize ["modifyvm", :id, "--nic3", "generic"]
+    vb.customize ["modifyvm", :id, "--nicgenericdrv3", "VDE"]
+    vb.customize ["modifyvm", :id, "--nicproperty3", "network=/tmp/srnet/floor1"]
+  end
+
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
   # config.vm.box_url = "http://domain.com/path/to/above.box"
