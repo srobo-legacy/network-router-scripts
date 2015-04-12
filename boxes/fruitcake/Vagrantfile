@@ -28,6 +28,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--nicproperty3", "network=/tmp/srnet/floor0"]
   end
 
+  config.vm.hostname = "fruitcake"
+
   # jmorse: reference config below
 
   # The url from where the 'config.vm.box' box will be fetched if it
