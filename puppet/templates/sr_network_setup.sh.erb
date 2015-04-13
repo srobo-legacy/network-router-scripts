@@ -73,28 +73,9 @@ EOF
     echo "Network frobbed"
     }
 
-while getopts "123" o; do
-	case $o in
-		1) 
-			dosetup("10.1.0.0/16", "10.1.0.1", "10.4.0.1",
-				"p1p1", "p1p2", 
-				"10.1.1.0,10.1.255.255,1h")
-			didsomething=1; ;;
-		2) 
-			echo "No config for floor 2 yet" 1>&2;
-			exit 1;
-			didsomething=1; ;;
-		3) 
+# Config is now cal'd by hiera
 
-			dosetup("10.3.0.0/16", "10.3.0.1", "10.4.0.3",
-				"p1p1", "p1p2", 
-				"10.3.1.0,10.3.255.255,1h")
-			didsomething=1; ;;
-		*) echo "Unrecognized option" 1>&2;
-			exit 1;
-			;;
-	esac
-done
+dosetup("<%= @floor_comp_net %>", "<%= @floor_comp_addr %>", "<%= @newbury_side_comp_addr %>", "<%= @newbury_nic %>", "<%= @floor_nic %>", "<%= @lease_range %>")
 
 if test "$didsomething" -eq 0; then
 	echo "Didn't do anything" 1>&2
