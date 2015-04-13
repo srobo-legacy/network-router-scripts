@@ -1,0 +1,7 @@
+---
+newbury_nic: enp0s8
+floor_nic: enp0s9
+newbury_side_comp_addr: 10.4.0.2
+floor_comp_addr: 10.2.0.1
+floor_comp_net: 10.2.0.0/16
+lease_range: 10.2.1.0,10.2.255.255,1h
