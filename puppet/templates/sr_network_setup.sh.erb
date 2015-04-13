@@ -1,0 +1,102 @@
+#!/bin/bash
+
+didsomething=0
+
+function dosetup {
+    mynetmask=$1
+    myip=$2
+    myroutingip=$3
+    myrange=$4
+    newburynic=$5
+    compnic=$6
+    comprange=$7
+
+    # First, configurate our ip addresses
+    ip addr add $myip nic $compnic
+    ip addr add $myroutingip nic $newburynic
+
+    # Second, set up NAT to route stuff from the competition network onto the
+    # internet through newbury.
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+
+    iptables -t nat -F 'POSTROUTING'
+
+    # NAT things that are coming from our network, but aren't going to our
+    # other networks
+    iptables -t nat -A 'POSTROUTING' -s $mynetmask -d !10.1.0.0/16 -d !10.2.0.0/16 -d !10.3.0.0/16 -j MASQUERADE
+
+    # Third, set up routes to everywhere else. The routing network, which will
+    # be across Newbury's hardware, is 10.4.0.0/16, floor 1 will be 10.4.0.1,
+    # and so forth.
+
+    if "$myroutingnic" != "10.4.0.1"; then
+	    ip route add 10.1.0.0/16 via 10.4.0.1
+    fi
+
+    if "$myip" != "10.4.0.2"; then
+	    ip route add 10.2.0.0/16 via 10.4.0.2
+    fi
+
+    if "$myip" != "10.4.0.3"; then
+	    ip route add 10.3.0.0/16 via 10.4.0.3
+    fi
+
+    # Finally, wipe dnsmasq config and re-enable it.
+    echo <<EOF
+    # SR related network config
+    interface $compnic
+    dhcp-range=$myrange
+
+    # Fixed mac -> addr mappings
+    # IPS NOT FIXED YET
+    dhcp-host=00:18:0a:01:40:37,sown-node-268,10.1.1.1
+    dhcp-host=00:18:0a:01:40:2a,sown-node-278,10.1.1.2
+    dhcp-host=00:18:0a:01:3e:c8,sown-node-265,10.1.1.3
+    dhcp-host=00:18:0a:01:3f:9d,sown-node-255,10.1.1.4
+    dhcp-host=00:18:0a:01:3f:8b,sown-node-249,10.1.1.5
+    dhcp-host=00:18:0a:01:3e:94,sown-node-273,10.1.1.6
+    dhcp-host=00:18:0a:01:3f:3f,sown-node-276,10.1.1.7
+
+    dhcp-host=20:4e:7f:71:64:62,netgear-1,10.1.1.8
+    dhcp-host=20:4e:7f:71:64:cb,netgear-2,10.1.1.9
+    dhcp-host=20:4e:7f:71:64:4c,netgear-3,10.1.1.10
+    dhcp-host=20:4e:7f:71:64:ce,netgear-4,10.1.1.11
+    dhcp-host=20:4e:7f:71:64:bc,netgear-5,10.1.1.12
+    dhcp-host=20:4e:7f:71:64:d6,netgear-6,10.1.1.13
+    dhcp-host=20:4e:7f:71:64:4e,netgear-7,10.1.1.14
+    dhcp-host=20:4e:7f:71:64:bf,netgear-8,10.1.1.15
+EOF
+    > /etc/dnsmasq.conf
+
+    service dnsmasq restart
+
+    echo "Network frobbed"
+    }
+
+while getopts "123" o; do
+	case $o in
+		1) 
+			dosetup("10.1.0.0/16", "10.1.0.1", "10.4.0.1",
+				"p1p1", "p1p2", 
+				"10.1.1.0,10.1.255.255,1h")
+			didsomething=1; ;;
+		2) 
+			echo "No config for floor 2 yet" 1>&2;
+			exit 1;
+			didsomething=1; ;;
+		3) 
+
+			dosetup("10.3.0.0/16", "10.3.0.1", "10.4.0.3",
+				"p1p1", "p1p2", 
+				"10.3.1.0,10.3.255.255,1h")
+			didsomething=1; ;;
+		*) echo "Unrecognized option" 1>&2;
+			exit 1;
+			;;
+	esac
+done
+
+if test "$didsomething" -eq 0; then
+	echo "Didn't do anything" 1>&2
+	exit 1
+fi
