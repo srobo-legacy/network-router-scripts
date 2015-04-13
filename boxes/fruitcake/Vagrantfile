@@ -31,6 +31,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Vagrant only sends manifests dir. Map over files and templates.
   config.vm.synced_folder "../../puppet/templates", "/tmp/vagrant-puppet/templates"
 
+  # Also map over network configuration directory
+  config.vm.synced_folder "../../config", "/etc/sr_netconfig"
+
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "../../puppet/manifests"
     puppet.manifest_file  = "site.pp"

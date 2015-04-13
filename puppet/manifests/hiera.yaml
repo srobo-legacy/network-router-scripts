@@ -2,6 +2,6 @@
 :backends:
   - yaml
 :yaml:
-  :datadir: /etc/puppet/hieradata
+  :datadir: /etc/sr_netconfig
 :hierarchy:
-  - "node/%{::hostname}"
+  - "%{::hostname}"
