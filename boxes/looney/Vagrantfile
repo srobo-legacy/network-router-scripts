@@ -28,6 +28,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :shell, inline: "yum install -y puppet hiera"
 
+  # Somehow, configuring the hostname doesn't take...
+  config.vm.provision :shell, inline: "hostname looney"
+
   # Vagrant only sends manifests dir. Map over files and templates.
   config.vm.synced_folder "../../puppet/templates", "/tmp/vagrant-puppet/templates"
 
