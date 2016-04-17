@@ -69,20 +69,20 @@ function dosetup {
     #### SRComp related hardware
 
     # Pis, IPs equal to their number + 20
-    dhcp-host=b8:27:eb:89:e9:e0,pi-outside-0.local,10.1.1.20
-    dhcp-host=b8:27:eb:51:84:16,pi-outside-1.local,10.1.1.21
-    dhcp-host=b8:27:eb:e9:ec:98,pi-outside-2.local,10.1.1.22
-    dhcp-host=b8:27:eb:2e:84:e4,pi-arena-A0.local,10.1.1.23
-    dhcp-host=b8:27:eb:ec:0e:80,pi-arena-A1.local,10.1.1.24
-    dhcp-host=b8:27:eb:e4:7a:ef,pi-arena-A2.local,10.1.1.25
-    dhcp-host=b8:27:eb:ed:f2:77,pi-arena-A3.local,10.1.1.26
-    dhcp-host=b8:27:eb:be:ce:73,pi-arena-B0.local,10.1.1.27
-    dhcp-host=b8:27:eb:b9:2b:29,pi-arena-B1.local,10.1.1.28
-    dhcp-host=b8:27:eb:3c:0b:c5,pi-arena-B2.local,10.1.1.29
-    dhcp-host=b8:27:eb:eb:9a:17,pi-arena-B3.local,10.1.1.30
+    dhcp-host=b8:27:eb:89:e9:e0,pi-outside-0.sr,10.1.1.20
+    dhcp-host=b8:27:eb:51:84:16,pi-outside-1.sr,10.1.1.21
+    dhcp-host=b8:27:eb:e9:ec:98,pi-outside-2.sr,10.1.1.22
+    dhcp-host=b8:27:eb:2e:84:e4,pi-arena-A0.sr,10.1.1.23
+    dhcp-host=b8:27:eb:ec:0e:80,pi-arena-A1.sr,10.1.1.24
+    dhcp-host=b8:27:eb:e4:7a:ef,pi-arena-A2.sr,10.1.1.25
+    dhcp-host=b8:27:eb:ed:f2:77,pi-arena-A3.sr,10.1.1.26
+    dhcp-host=b8:27:eb:be:ce:73,pi-arena-B0.sr,10.1.1.27
+    dhcp-host=b8:27:eb:b9:2b:29,pi-arena-B1.sr,10.1.1.28
+    dhcp-host=b8:27:eb:3c:0b:c5,pi-arena-B2.sr,10.1.1.29
+    dhcp-host=b8:27:eb:eb:9a:17,pi-arena-B3.sr,10.1.1.30
 
     # Compbox VM -- ### TODO ###
-    #dhcp-host= TODO ,compbox-2015.local,10.1.1.31
+    #dhcp-host= TODO ,compbox-2015.sr,10.1.1.31
 EOF
     > /etc/dnsmasq.conf
 
